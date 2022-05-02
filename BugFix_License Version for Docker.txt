@@ -1,0 +1,37 @@
+
+# Adjust for Best Performance
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" -Name VisualFXSetting -Value 0x02 -Type DWORD -force
+
+#Adjust best performance for Programs
+Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\PriorityControl -Name Win32PrioritySeparation -Value 38
+
+# 38 for Program | 24 for Background (decimal values)
+
+#Windows Update Script for local update & stop auto update
+Remove-Item -Path "HKLM:Software\Policies\Microsoft\Windows\WindowsUpdate"
+#New-Item -Path "HKLM:Software\Policies\Microsoft\Windows\WindowsUpdate\AU"
+#Set-ItemProperty -Path "HKLM:\software\policies\Microsoft\Windows\WindowsUpdate" -Name WUServer -Value "http://wsus.domain.com:8530" -Type String -force
+#Set-ItemProperty -Path "HKLM:\software\policies\Microsoft\Windows\WindowsUpdate" -Name WUStatusServer -Value "http://wsus.domain.co:8530" -Type String -force
+#Set-ItemProperty -Path "HKLM:\software\policies\Microsoft\Windows\WindowsUpdate\AU" -Name UseWUServer -Value "1" -Type DWORD -force
+#Set-ItemProperty -Path "HKLM:\software\policies\Microsoft\Windows\WindowsUpdate\AU" -Name NoAutoUpdate -Value "1" -Type DWORD -force
+# To disable BITS, Update , Search, edge update,google update
+Set-service -name BITS -StartupType Automatic 
+Set-service -name wuauserv -StartupType Manual
+Set-service -name WSearch -StartupType Disabled
+Set-service -name edgeupdate -StartupType Disabled
+Set-service -name edgeupdatem -StartupType Disabled
+Set-service -name gupdate -StartupType Disabled
+Set-service -name gupdatem -StartupType Disabled
+# To Stop BITS, Update , Search, edge update,google update
+Stop-service  -name  WSearch -Force
+#Stop-service  -name  wuauserv -Force
+#Stop-service  -name  BITS -Force
+Stop-service  -name  edgeupdate -Force
+Stop-service  -name  edgeupdatem -Force
+Stop-service  -name  gupdate -Force
+Stop-service  -name  gupdatem -Force
+# To disable media update service 
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\WaaSMedicSvc" -Name Start -Value "4" -Type DWORD -Force
+# To disable defender
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -Value "1" -Type DWORD -Force
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\mpssvc" -Name Start -Value "2" -Type DWORD -Force

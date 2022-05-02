@@ -1,0 +1,8 @@
+services:
+  database:
+    image: redis
+  web:
+    image: nginx
+    ports:
+     - 9090:80
+    
